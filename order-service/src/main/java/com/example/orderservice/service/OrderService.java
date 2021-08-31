@@ -1,8 +1,11 @@
-package com.example.catalogservice.service;
+package com.example.orderservice.service;
 
-import com.example.catalogservice.entity.CatalogEntity;
 
-public interface CatalogService {
+import com.example.orderservice.dto.OrderDto;
+import com.example.orderservice.repository.OrderEntity;
 
-  Iterable<CatalogEntity> getAllCatalogs();
+public interface OrderService {
+  OrderDto createOrder(OrderDto orderDto);
+  OrderDto getOrderByOrderId(String orderId);
+  Iterable<OrderEntity> getOrdersByUserId(String userId);
 }
