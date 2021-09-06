@@ -8,9 +8,9 @@ import com.example.userservice.vo.RequestUser;
 import com.example.userservice.vo.ResponseUser;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,16 +28,24 @@ public class UserController {
   private final Greeting greeting;
   private final UserService userService;
   private final ModelMapper modelMapper;
+  private final Environment env;
 
-  public UserController(Greeting greeting, UserService userService, ModelMapper modelMapper) {
+  public UserController(Greeting greeting, UserService userService, ModelMapper modelMapper,
+      Environment env) {
     this.greeting = greeting;
     this.userService = userService;
     this.modelMapper = modelMapper;
+    this.env = env;
   }
 
   @GetMapping("/health_check")
-  public String status(HttpServletRequest request) {
-    return String.format("It's Working in User Service on PORT %s", request.getServerPort());
+  public String status() {
+    return String.format("It's Working in User Service"
+        + ", port(local.server.port)=" + env.getProperty("local.server.port")
+        + ", port(server.port)=" + env.getProperty("server.port")
+        + ", token secret=" + env.getProperty("token.secret")
+        + ", token expiration time=" + env.getProperty("token.expiration_time")
+    );
   }
 
   @GetMapping("/welcome")
